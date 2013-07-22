@@ -14,8 +14,9 @@ Gem::Specification.new do |s|
   s.summary     = %q{A gem allowing active_record model has default value.}
   s.description = %q{This "acts_as" extension provides the capabilities for selecting default model according to scope.}
 
-  s.files         = Dir["{lib}/**/*", "MIT-LICENSE", "Rakefile", "README.rdoc"]
-  s.require_paths = ['lib']
+  s.files         = `git ls-files`.split("\n")
+  s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
+  s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
 
   s.add_dependency 'activerecord', '>= 3.0'
 
