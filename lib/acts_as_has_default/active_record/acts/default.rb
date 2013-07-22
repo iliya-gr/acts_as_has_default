@@ -14,7 +14,7 @@ module ActiveRecord
 
           class_eval <<-RUBY, __FILE__, __LINE__ + 1
 
-            def scope_condition_for_#{configuration[:column]}
+            def defaults_scope_conditions_for_#{configuration[:column]}
               scope = ::ActiveRecord::VERSION::MAJOR == 4 ? self.class.all : self.class.scoped
               %w(#{configuration[:scope].join(' ')}).each do |attr|
                 scope = scope.where(attr.intern => self[attr.intern])
@@ -28,19 +28,19 @@ module ActiveRecord
 
             def update_#{configuration[:column]}_as_default
               unless #{configuration[:column]}
-                self.#{configuration[:column]} = scope_condition_for_#{configuration[:column]}.where(self.class.arel_table[:id].not_eq(id)).empty?
+                self.#{configuration[:column]} = defaults_scope_conditions_for_#{configuration[:column]}.where(self.class.arel_table[:id].not_eq(id)).empty?
               end
 
               true
             end
 
             def invalidate_#{configuration[:column]}_as_default
-              scope_condition_for_#{configuration[:column]}.where(self.class.arel_table[:id].not_eq(id)).update_all(['`#{configuration[:column]}` = ?', false]) if #{configuration[:column]}
+              defaults_scope_conditions_for_#{configuration[:column]}.where(self.class.arel_table[:id].not_eq(id)).update_all(['`#{configuration[:column]}` = ?', false]) if #{configuration[:column]}
             end
 
             def elect_#{configuration[:column]}_as_default
-              unless scope_condition_for_#{configuration[:column]}.where(self.class.arel_table[:id].not_eq(id)).empty?
-                target = scope_condition_for_#{configuration[:column]}.where(self.class.arel_table[:id].not_eq(id)).first
+              unless defaults_scope_conditions_for_#{configuration[:column]}.where(self.class.arel_table[:id].not_eq(id)).empty?
+                target = defaults_scope_conditions_for_#{configuration[:column]}.where(self.class.arel_table[:id].not_eq(id)).first
                 target.update_attributes(#{configuration[:column]}: true) if target
               end
             end
