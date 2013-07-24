@@ -8,17 +8,19 @@ This `acts_as` extension provides the capabilities for selecting default model. 
 
 In your Gemfile:
 
-```
-  gem 'acts_as_has_default'
+```ruby
+gem 'acts_as_has_default'
 ```
 
 ## Example
 
 At first, you need to add a `default` column to desired table:
 
-    rails g migration AddDefaultToAddress default:boolean
-    rake db:migrate
-    
+```console
+rails g migration AddDefaultToAddress default:boolean
+rake db:migrate
+````
+
 After that you can use `acts_as_has_default` method in the model:
 
 ```ruby
